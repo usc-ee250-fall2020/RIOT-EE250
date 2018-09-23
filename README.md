@@ -1,3 +1,9 @@
+## DESCRIPTION
+This is a fork of RIOT-OS used to teach EE 250L at the University of Southern
+California.
+
+Most of the code changed is inside the *example* folder.
+
 [![Nightly CI status master][master-ci-badge]][master-ci-link]
 [![IRC][irc-badge]][irc-link]
 
