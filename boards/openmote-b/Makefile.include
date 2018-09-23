@@ -19,11 +19,12 @@ ifeq ($(PROGRAMMER),cc2538-bsl)
   export FLASHER = $(RIOTBASE)/dist/tools/cc2538-bsl/cc2538-bsl.py
   export FFLAGS  = -p "$(PORT_BSL)" --bootloader-invert-lines -e -w -v -b 460800 $(HEXFILE)
 else ifeq ($(PROGRAMMER),jlink)
-  export FLASHER = $(RIOTBOARD)/$(BOARD)/dist/flash.sh
-  export FFLAGS  = $(BINDIR) $(HEXFILE)
-  export DEBUGGER = $(RIOTBOARD)/$(BOARD)/dist/debug.sh
-  export DEBUGSERVER = JLinkGDBServer -device CC2538SF53
-  export RESET = $(RIOTBOARD)/$(BOARD)/dist/reset.sh
+ # setup JLink for flashing
+  export JLINK_DEVICE := cc2538sf53
+  export FLASH_ADDR := 200000
+  export JLINK_IF := JTAG
+  export TUI := 1
+include $(RIOTMAKE)/tools/jlink.inc.mk
 endif
 
 export OFLAGS    = -O binary
