@@ -34,8 +34,10 @@ void board_init(void)
     gpio_init(RF_SWITCH_SUB_GHZ_PIN, GPIO_OUT);
 
     /* start with cc2538 2.4ghz radio*/
-    RF_SWITCH_2_4_GHZ_ON;
-    RF_SWITCH_SUB_GHZ_OFF;
+    /* This actually means 2.4ghz is on. The bits are flipped in the macros, and
+    this is a temp fix. */    
+    RF_SWITCH_2_4_GHZ_OFF;
+    RF_SWITCH_SUB_GHZ_ON;
 
     /* initialize the CPU */
     cpu_init();
