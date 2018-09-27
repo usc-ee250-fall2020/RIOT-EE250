@@ -1,11 +1,3 @@
-/*
- * Copyright (C) 2015 Inria
- *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
- */
-
 /**
  * @ingroup     examples
  * @{
@@ -30,9 +22,6 @@
 #define MAIN_QUEUE_SIZE     (8)
 
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
-
-/* allocate a stack for the UDP receiver thread */
-static char udp_rx_thr_stack[THREAD_STACKSIZE_MAIN];
 
 int main(void)
 {
