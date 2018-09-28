@@ -16,7 +16,9 @@
 
 #include "kernel_types.h"
 
-typedef udp_rx_args {
+#define UDP_RX_DONE     9 //arbitrary number
+
+typedef struct {
     kernel_pid_t main_pid;
     unsigned int num_pkts;
     uint32_t udp_port;

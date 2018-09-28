@@ -19,7 +19,15 @@
 #include "msg.h"
 #include "net/gnrc.h"
 #include "udp_rx_thr.h"
-#include "cc2538_rf.h"
+
+#define OPENMOTE_BUILD 0
+#if OPENMOTE_BUILD
+  #include "cc2538_rf.h"
+#endif
+
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 
 /**
  * TODO (Lab 08): implement this functino for the RSS and PRR lab assignment
@@ -30,10 +38,10 @@
  * RSSI value because it is a 2-complement number. This function should 
  * ultimately print out the RSS of the packet inputted.
  */
-static void print_rss(gnrc_pktsnip_t *pkt)
-{
+// static void print_rss(gnrc_pktsnip_t *pkt)
+// {
 
-}
+// }
 
 /**
  * TODO (Lab 08): implement this function for the RSS and PRR lab assignment
@@ -42,10 +50,10 @@ static void print_rss(gnrc_pktsnip_t *pkt)
  * you actually received. Calculate the Packet Reception Ratio and print it
  * out.
  */
-static void print_prr(uint32_t pkt_rcv, uint32_t num_pkts)
-{
+// static void print_prr(uint32_t pkt_rcv, uint32_t num_pkts)
+// {
 
-}
+// }
 
 /**
  * TODO: implement this function 
@@ -92,6 +100,7 @@ static void *_udp_rx_thr(void *arg)
         switch (msg.type) {
             //case ??:
             default:
+                DEBUG("udp_rx_thr: received something unexpected");
                 break;
         }
     }
@@ -100,8 +109,8 @@ static void *_udp_rx_thr(void *arg)
     but let's do it for completion and good practice. */
 
     /* send shutdown message to main thread */
-    msg.type = NULL; //we are not using this field
-    //msg.content.value = ?? //TODO
+    //msg.type = ?? //TODO
+    msg.content.value = 0; //we are not using this field
     msg_send(&msg, main_pid);
 
     return 0;
