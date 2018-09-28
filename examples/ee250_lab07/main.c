@@ -2,7 +2,7 @@
  * @ingroup     examples
  * @{
  *
- * @file
+ * @file        main.c
  * @brief       Lab 07: Receive 10 UDP packets and quit.
  *
  * @author      [list team members here]
@@ -12,10 +12,11 @@
  * @}
  */
 
-/* We've provided all the includes you need. Any functions you see should be 
-defined in these header files, so browse these header files and their 
-corresponding implementations (often the equivalent .c file) to learn more about
-the function calls. */
+/** We've provided all the includes you need. Any functions you see should be 
+ * defined in these header files, so browse these header files and their 
+ * corresponding implementations (often the equivalent .c file) if you need more
+ * information on something
+ */
 #include <stdio.h>
 
 #include "msg.h"
@@ -25,20 +26,21 @@ the function calls. */
 #include "net/gnrc.h"
 #include "net/gnrc/netif.h"
  
-/* Print statements always slow code down. Use DEBUG() instead of printf() if
-you want to disable the print statements on the fly by setting ENABLE_DEBUG to 0 */
+/* Print statements always slow code down. Also, sometimes you don't need all
+   print statements unless you are debugging. Use DEBUG() instead of printf() if
+   you want to disable the print statements on the fly by setting ENABLE_DEBUG 
+   to 0 */
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
 /* Use macros to give a constant a name. Arbitrary numbers in code is usually
- bad practice */
-#define MAIN_QUEUE_SIZE     (8)
+   bad practice */
+ #define MAIN_QUEUE_SIZE     (8)
 #define NUM_PKTS_TO_RX      (10)
 #define UDP_PORT            (8050)
 
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
 
-struct 
 kernel_pid_t main_pid = NULL;
 
 int main(void)
@@ -67,8 +69,7 @@ int main(void)
     }
 
     /* Initialize udp_rx_thr with the custom struct type that defines the 
-    arguments in which the thread should use to run */
-    //udp_rx_args_t udp_rx_args = ?? //TODO
+    arguments in which udp_rx_thr should use to run */
     udp_rx_thr_init((void *) &udp_rx_args); 
     
     while(1)
