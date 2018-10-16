@@ -3,7 +3,7 @@
  * @{
  *
  * @file        main.c
- * @brief       Lab 08: Receive 20 UDP packets, print out RSS, and quit.
+ * @brief       Lab 08: Receive 30 UDP packets, print out RSS, and quit.
  *
  * @author      [list team members here]
  *
@@ -38,7 +38,8 @@
 #define NUM_PKTS_TO_TX      (0)
 #define UDP_SRC_PORT        (8020)
 #define UDP_DST_PORT        (8050)
-#define PKT_INTERVAL_USEC   (1000000) 
+#define PKT_INTERVAL_USEC   (1000000)
+#define TX_POWER            (7)
 
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
 
@@ -48,10 +49,11 @@ int main(void)
 {
     msg_init_queue(main_msg_queue, sizeof(main_msg_queue));
 
-    printf("Lab 08 Broadcaster Code.\n");
+    printf("Lab 08 Multicaster Code.\n");
 
     /* Code to simply print out the RIOT device's IPv6 address */
     gnrc_netif_t *netif = NULL;
+    uint16_t tx_power = TX_POWER;
     while ((netif = gnrc_netif_iter(netif))) {
         ipv6_addr_t ipv6_addrs[GNRC_NETIF_IPV6_ADDRS_NUMOF];
         int res = gnrc_netapi_get(netif->pid, NETOPT_IPV6_ADDR, 0, ipv6_addrs,
@@ -65,8 +67,14 @@ int main(void)
 
             ipv6_addr_to_str(ipv6_addr, &ipv6_addrs[i], IPV6_ADDR_MAX_STR_LEN);
             printf("My address is %s\n", ipv6_addr);
+
+            /* For EE 250L, we only use devices with one netif, se it's safe to set th elappower now */
+            gnrc_netapi_set(netif->pid, NETOPT_TX_POWER, 0, &tx_power, sizeof(tx_power));
+            gnrc_netapi_get(netif->pid, NETOPT_TX_POWER, 0, &tx_power, sizeof(tx_power));
+            printf("Power level is now %d\n", tx_power);
         }
     }
+
 
     const char *addr_str = "ff02::1";
     ipv6_addr_t addr;
