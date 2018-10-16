@@ -20,25 +20,38 @@
 #include "net/gnrc.h"
 #include "udp_rx_thr.h"
 
-#define OPENMOTE_BUILD 0
-#if OPENMOTE_BUILD
-  #include "cc2538_rf.h"
-#endif
-
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
 
 /**
- * TODO (Lab 08): implement this functino for the RSS and PRR lab assignment
+ * TODO (Lab 08): implement this function for the RSS and PRR lab assignment
  *
  * For each packet you receive, you need to extract the Received Signal Strength
- * Indicator (RSSI) from the layer 2 header. The Received Signal Strength (no I)
- * is equal to the RSSI minus CC2538_RSSI_OFFSET. You must cast the original 
- * RSSI value because it is a 2-complement number. This function should 
- * ultimately print out the RSS of the packet inputted.
+ * Indicator (RSSI) from the layer 2 header. There is a lot of confusion with 
+ * RSSI and RSS (Received Signal Strength without the I). RSSI is supposed to be
+ * a number that helps indicate the RSS, which is the actual received power in 
+ * dBm. This function should ultimately extract the RSS (in dBm) which can be 
+ * found in the L2 header of the the packet and print it out. 
+ * 
+ * When you find the gnrc_pktsnip_t of type GNRC_NETTYPE_NETIF, *data points to
+ * the header contents which is standardized in the RIOT code to be in the 
+ * format of the struct gnrc_netif_hdr_t. To read out that header, you need to 
+ * cast the pointer to the type gnrc_netif_hdr_t. Then, you will be able to 
+ * access the rssi field of the header. 
+ * 
+ * RIOT developers decided to create a field in the gnrc_netif_hdr_t struct 
+ * named rssi even though the standard in the entire codebase is to actually 
+ * have this field represent the RSS in dBm, not RSSI, which we believe to be 
+ * incorrect. Nonetheless, this does not affect the final result we are looking
+ * for. Even though it's named RSSI, treat it as the actual received power, RSS.
+ *
+ * If you need more examples, you can take a look at how _dump_snip() in 
+ * gnrc_pktdump.c accesses the the L2 header data when you have a pointer to the
+ * L2 packet snip. _dump_snip() will call gnrc_netif_hdr_print() (implemented in
+ * gnrc_netif_hdr_print.c) which will then print out each piece of the L2 header.
  */
-// static void print_rss(gnrc_pktsnip_t *pkt)
+// static void _print_rss(gnrc_pktsnip_t *pkt)
 // {
 
 // }
@@ -50,7 +63,7 @@
  * you actually received. Calculate the Packet Reception Ratio and print it
  * out.
  */
-// static void print_prr(uint32_t pkt_rcv, uint32_t num_pkts)
+// static void _print_prr(uint32_t pkts_rcvd, uint32_t num_pkts)
 // {
 
 // }
@@ -63,12 +76,12 @@
  * the packet's payload. Print the payload. You can assume they are readable
  * ascii characters but you can NOT assume the payload is a null terminated
  * string. Thus, you should print based on the size of the data. FYI, this
- * linked list is not circular. You can us gnrc_pktsnip_search_type().
+ * linked list is not circular. You can use gnrc_pktsnip_search_type().
  */
-static void _print_payload(gnrc_pktsnip_t *pkt)
-{
+// static void _print_payload(gnrc_pktsnip_t *pkt)
+// {
 
-}
+// }
 
 static void *_udp_rx_thr(void *arg)
 {
@@ -130,5 +143,6 @@ kernel_pid_t udp_rx_thr_init(void *args)
       what will happen to the input argument `args`. 
     */ 
 
-    /* use thread_create() here */
+    /* Use thread_create() here. Refer to thread.h, which we have already 
+    #include-d for you above for help on how to use this function. */
 }
