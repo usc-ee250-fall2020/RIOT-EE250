@@ -24,7 +24,7 @@
 #include "net/gnrc.h"
 #include "net/gnrc/ipv6.h"
 #include "net/gnrc/udp.h"
- 
+
 /* Print statements always slow code down. Also, sometimes you don't need all
    print statements unless you are debugging. Use DEBUG() instead of printf() if
    you want to disable the print statements on the fly by setting ENABLE_DEBUG 
@@ -39,7 +39,7 @@
 #define UDP_SRC_PORT        (8020)
 #define UDP_DST_PORT        (8050)
 #define PKT_INTERVAL_USEC   (1000000)
-#define TX_POWER            (7)
+#define TX_POWER            (0) /* dBm */
 
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
 
@@ -53,7 +53,7 @@ int main(void)
 
     /* Code to simply print out the RIOT device's IPv6 address */
     gnrc_netif_t *netif = NULL;
-    uint16_t tx_power = TX_POWER;
+    int16_t tx_power = TX_POWER;
     while ((netif = gnrc_netif_iter(netif))) {
         ipv6_addr_t ipv6_addrs[GNRC_NETIF_IPV6_ADDRS_NUMOF];
         int res = gnrc_netapi_get(netif->pid, NETOPT_IPV6_ADDR, 0, ipv6_addrs,
@@ -75,12 +75,18 @@ int main(void)
         }
     }
 
-
-    const char *addr_str = "ff02::1";
+    int iface;
+    char *addr_str = "ff02::1";
     ipv6_addr_t addr;
     uint16_t port = UDP_DST_PORT;
     char data_to_send[12] = "Go Trojans!";
     unsigned int num_pkts = NUM_PKTS_TO_TX;
+
+    /* get interface, if available */
+    iface = ipv6_addr_split_iface(addr_str);
+    if ((iface < 0) && (gnrc_netif_numof() == 1)) {
+        iface = gnrc_netif_iter(NULL)->pid;
+    }
 
     if (ipv6_addr_from_str(&addr, addr_str) == NULL) {
         puts("Error: unable to parse destination address");
@@ -92,7 +98,7 @@ int main(void)
         unsigned payload_size;
 
         /* allocate payload */
-        payload = gnrc_pktbuf_add(NULL, data_to_send, 12, GNRC_NETTYPE_UNDEF);
+        payload = gnrc_pktbuf_add(NULL, data_to_send, strlen(data_to_send), GNRC_NETTYPE_UNDEF);
         if (payload == NULL) {
             puts("Error: unable to copy data to packet buffer");
             return 1;
@@ -102,7 +108,7 @@ int main(void)
         payload_size = (unsigned)payload->size;
 
         /* allocate UDP header, set source port := destination port */
-        udp = gnrc_udp_hdr_build(payload, UDP_SRC_PORT, UDP_DST_PORT);
+        udp = gnrc_udp_hdr_build(payload, UDP_DST_PORT, UDP_DST_PORT);
         if (udp == NULL) {
             puts("Error: unable to allocate UDP header");
             gnrc_pktbuf_release(payload);
@@ -115,6 +121,14 @@ int main(void)
             puts("Error: unable to allocate IPv6 header");
             gnrc_pktbuf_release(udp);
             return 1;
+        }
+
+        /* add netif header, if interface was given */
+        if (iface > 0) {
+            gnrc_pktsnip_t *netif = gnrc_netif_hdr_build(NULL, 0, NULL, 0);
+
+            ((gnrc_netif_hdr_t *)netif->data)->if_pid = (kernel_pid_t)iface;
+            LL_PREPEND(ip, netif);
         }
 
         /* send packet */
