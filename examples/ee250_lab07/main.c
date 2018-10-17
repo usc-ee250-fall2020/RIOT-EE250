@@ -41,7 +41,7 @@
 
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
 
-kernel_pid_t main_pid = NULL;
+kernel_pid_t main_pid = KERNEL_PID_UNDEF;
 
 int main(void)
 {
@@ -68,7 +68,7 @@ int main(void)
         }
     }
 
-    /* Initialize udp_rx_thr with the custom struct type that defines the 
+    /* TODO: Initialize udp_rx_thr with the custom struct type that defines the 
     arguments in which udp_rx_thr should use to run */
     udp_rx_thr_init((void *) &udp_rx_args); 
     
@@ -76,12 +76,12 @@ int main(void)
     {
         msg_receive(&msg);
 
-        if (msg.content.value == UDP_RX_DONE) {
+        if (msg.type == UDP_RX_DONE) {
             printf("main: received shutdown signal from udp_rx_thr\n");
             return 0; // when main exits, RIOT-OS shuts down
         }
-
-        DEBUG("main: received illegal message...\n")
+ 
+        DEBUG("main: received illegal message...\n");
         xtimer_usleep(1000000); //sleep just in case we rcv illegal msgs
     }
 
