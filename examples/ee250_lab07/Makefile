@@ -19,16 +19,11 @@ DEVELHELP ?= 1
 USEMODULE += gnrc_netdev_default
 USEMODULE += auto_init_gnrc_netif
 # Specify the mandatory networking modules for IPv6 and UDP
-USEMODULE += gnrc_ipv6
+USEMODULE += gnrc_ipv6_router_default
 USEMODULE += gnrc_udp
 # Additional networking modules that can be dropped if not needed
-USEMODULE += gnrc_icmpv6_echo
 # Use minimal standard PRNG
 USEMODULE += prng_minstd
-
-CFLAGS += -DGNRC_PKTBUF_SIZE=512 -DGNRC_NETIF_IPV6_ADDRS_NUMOF=2 \
-          -DGNRC_NETIF_IPV6_GROUPS_NUMOF=2 -DGNRC_IPV6_NIB_NUMOF=1 \
-          -DGNRC_IPV6_NIB_OFFL_NUMOF=1 # be able to configure at least one route
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
