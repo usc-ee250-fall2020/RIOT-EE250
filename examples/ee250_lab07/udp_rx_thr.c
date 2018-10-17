@@ -39,8 +39,9 @@
  * format of the struct gnrc_netif_hdr_t. To read out that header, you need to 
  * cast the pointer to the type gnrc_netif_hdr_t. Then, you will be able to 
  * access the rssi field of the header. When you get the rssi field, you  MUST
- * subtract 73 from it to convert it to an actual dBm value. Otherwise, you'll
- * get numbers of 30 dBm or higher, which make no sense!
+ * subtract 73 from it to convert it to an actual dBm value as per CC2538's
+ * user guide. Otherwise, you'll get numbers of 30 dBm or higher, which makes no
+ * sense!
  * 
  * RIOT developers decided to create a field in the gnrc_netif_hdr_t struct 
  * named rssi even though the standard in the entire codebase is to actually 
