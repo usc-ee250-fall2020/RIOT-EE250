@@ -35,7 +35,7 @@
 
 /* Use macros to give a constant a name. Arbitrary numbers in code is usually
    bad practice */
- #define MAIN_QUEUE_SIZE     (8)
+#define MAIN_QUEUE_SIZE     (8)
 #define NUM_PKTS_TO_RX      (10)
 #define UDP_PORT            (8050)
 
@@ -76,7 +76,7 @@ int main(void)
     {
         msg_receive(&msg);
 
-        if (msg.content.value == 0) {
+        if (msg.content.value == UDP_RX_DONE) {
             printf("main: received shutdown signal from udp_rx_thr\n");
             return 0; // when main exits, RIOT-OS shuts down
         }
