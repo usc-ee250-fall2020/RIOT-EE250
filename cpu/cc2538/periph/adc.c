@@ -78,14 +78,6 @@ int adc_sample(adc_t line, adc_res_t res)
             DEBUG("adc_sample: invalid resultion!\n");
             return -1;
     }
-    /**
-     * @attention CC2538 ADC supports differential comparision of two analog
-     * GPIO inputs, hence negative values are possible. RIOT currently allows
-     * positive ADC output only. Thus, reduce shift by one to compensate and
-     * get full value range according to ADC resolution. E.g. 10 Bit resultion
-     * with diff ADC would have [-512,511] range but RIOT expects [0,1023].
-     */
-    rshift--;
 
     /* configure adc line with parameters and trigger a single conversion*/
     uint32_t reg = (soc_adc->ADCCON3) & ~(SOC_ADC_ADCCON3_EREF_M |
