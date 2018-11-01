@@ -18,12 +18,19 @@ DEVELHELP ?= 1
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
 USEMODULE += gnrc_netdev_default
 USEMODULE += auto_init_gnrc_netif
-# Specify the mandatory networking modules for IPv6 and UDP
-USEMODULE += gnrc_ipv6_router_default
+
+#uncomment gnrc_ipv6_router_default when building for the OpenMote or gnrc_ipv6
+#for native
+# USEMODULE += gnrc_ipv6_router_default
+USEMODULE += gnrc_ipv6
+
 USEMODULE += gnrc_udp
 # Additional networking modules that can be dropped if not needed
 # Use minimal standard PRNG
 USEMODULE += prng_minstd
+
+#needed for embedded platforms (float printing is modularized because it's expensive!)
+USEMODULE += printf_float
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
