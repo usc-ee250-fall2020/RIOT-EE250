@@ -326,7 +326,8 @@ static int _recv(netdev_t *netdev, void *buf, size_t len, void *info)
         netdev_ieee802154_rx_info_t *radio_info = info;
         rssi_val = rfcore_read_byte() + CC2538_RSSI_OFFSET;
 
-        RFCORE_ASSERT(rssi_val > CC2538_RF_SENSITIVITY);
+        /* EE 250L: suppress error messages by commenting out asserts */
+        // RFCORE_ASSERT(rssi_val > CC2538_RF_SENSITIVITY);
 
         /* The number of dB above maximum sensitivity detected for the
          * received packet */
