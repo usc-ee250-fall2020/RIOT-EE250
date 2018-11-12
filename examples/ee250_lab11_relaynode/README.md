@@ -1,7 +1,8 @@
 # EE 250L
 
 This is a fork of the gnrc_networking example to serve as the relay node for
-Lab 11. This code is to be used by instructors.
+Lab 11. This code is to be used by instructors. Flash this code onto an OpenMote
+(do not `term`). Then, run the relay_node.py script.
 
 # gnrc_networking example
 
