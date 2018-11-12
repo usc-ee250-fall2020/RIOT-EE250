@@ -12,7 +12,7 @@ quit = False
 lock = threading.Lock()
 
 # Default port that openmote connects to.
-port_usb = '/dev/ttyUSB2'
+port_usb = '/dev/ttyUSB1'
 try:
     conn = Serial(port_usb,
                     '115200',
@@ -43,17 +43,18 @@ def _tx_thread():
     global quit
     send_addr = "ff02::1"
     send_port = 8850
-    secs = 2
     send_data = "sleep"
     command = ""
+
     count = 0
     while(not quit):
-        sleep(0.5);
+        sleep(1);
         count += 1
+        #set count to number of seconds 
         if(count == 10):
             command = "udp send " + send_addr + " " + str(send_port) + " " + send_data +"\n"
             write(conn, command)
-            print("Multicasted nodes to stop for " + str(2) + " seconds")
+            print("Multicasting to nodes to sleep for 4 seconds")
             count = 0
 
 def main():
@@ -80,8 +81,8 @@ def main():
         lock.acquire()
         line = conn.readline()
         lock.release()
-        if b'HWaddr' in line:
-            hwaddr = str(line).split('HWaddr: ')[1][:5]
+        if b'Long HWaddr' in line:
+            hwaddr = str(line).split('HWaddr: ')[1][:]
             print("Hardware address is " + hwaddr)
             break
     
