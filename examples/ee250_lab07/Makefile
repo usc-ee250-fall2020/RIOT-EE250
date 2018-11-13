@@ -7,8 +7,6 @@ BOARD ?= native
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
-BOARD_INSUFFICIENT_MEMORY := arduino-duemilanove arduino-uno nucleo-f031k6
-
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
@@ -19,10 +17,8 @@ DEVELHELP ?= 1
 USEMODULE += gnrc_netdev_default
 USEMODULE += auto_init_gnrc_netif
 
-#uncomment gnrc_ipv6_router_default when building for the OpenMote or gnrc_ipv6
-#for native
-# USEMODULE += gnrc_ipv6_router_default
-USEMODULE += gnrc_ipv6
+USEMODULE += gnrc_ipv6_router_default
+# USEMODULE += gnrc_ipv6  #if having problems with native, try using gnrc_ipv6 instead
 
 USEMODULE += gnrc_udp
 # Additional networking modules that can be dropped if not needed
