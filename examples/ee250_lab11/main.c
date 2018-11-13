@@ -50,7 +50,8 @@ static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
  *
  * @param[in] addr_str      Destination IPv6 address as a string.
  * @param[in] port_str      Destination port as a string.
- * @param[in] data          Pointer to data (must be a null terminated string).
+ * @param[in] data          Pointer to data. Must be a null terminated string 
+ *                          but will not send the null character.
  */
 static void udp_send(char *addr_str, char *port_str, char *data)
 {
@@ -166,23 +167,31 @@ int main(void)
      *
      * https://drive.google.com/file/d/1-nyGdwE2rrjEIpIzuDLM1fcsMmyz2K-K/view?usp=sharing
      */
+#ifdef MODULE_PERIPH_ADC    //native does not have an ADC
     if (adc_init(ADC_LINE(ADC_LINE_SELECT)) < 0) {
         printf("Initialization of ADC_LINE(%u) failed\n", ADC_LINE_SELECT);
         return 1;
     } else {
         printf("Successfully initialized ADC_LINE(%u)\n", ADC_LINE_SELECT);
     }
+#endif
     
     while(1)
     {
+        //TODO: handle mutex, format payload, send udp pkt, set sample interval
+
+#ifdef MODULE_PERIPH_ADC
         sample = adc_sample(ADC_LINE(ADC_LINE_SELECT), ADC_RES);
         if (sample < 0) {
             printf("ADC_LINE(%u): Error with line and resolution selection\n", ADC_LINE_SELECT);
         } else {
             printf("ADC_LINE(%u): %i\n", ADC_LINE_SELECT, sample);
         }
+#else
+        sample = 1024;
+        printf("fake ADC value for native: %d\n", sample);  
+#endif
 
-        //TODO: handle mutex, format payload, send udp pkt, set sample interval
     }
 
     /* should never be reached */

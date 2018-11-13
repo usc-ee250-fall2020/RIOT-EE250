@@ -2,29 +2,28 @@
 APPLICATION = ee250_lab11
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= openmote-b
+BOARD ?= native
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
-
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
 DEVELHELP ?= 1
 
-FEATURES_REQUIRED = periph_adc
 USEMODULE += xtimer
 
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
 USEMODULE += gnrc_netdev_default
 USEMODULE += auto_init_gnrc_netif
-
-#uncomment gnrc_ipv6_router_default when building for the OpenMote or gnrc_ipv6
-#for native
 USEMODULE += gnrc_ipv6_router_default
-# USEMODULE += gnrc_ipv6
+
+# Only require periph_adc if building for the OpenMote
+ifneq (,$(filter openmote-b,$(BOARD)))
+  FEATURES_REQUIRED = periph_adc
+endif
 
 USEMODULE += gnrc_udp
 # Additional networking modules that can be dropped if not needed
