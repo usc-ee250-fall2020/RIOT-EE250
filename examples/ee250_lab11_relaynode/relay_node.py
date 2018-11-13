@@ -81,8 +81,8 @@ def main():
         lock.acquire()
         line = conn.readline()
         lock.release()
-        if b'Long HWaddr' in line:
-            hwaddr = str(line).split('HWaddr: ')[1][:]
+        if b'inet6 addr' in line:
+            hwaddr = str(line).split('addr: ')[1][:26]
             print("Hardware address is " + hwaddr)
             break
     
