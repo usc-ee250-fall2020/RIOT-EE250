@@ -12,7 +12,7 @@ quit = False
 lock = threading.Lock()
 
 # Default port that openmote connects to.
-port_usb = '/dev/ttyUSB1'
+port_usb = '/dev/ttyUSB2'
 try:
     conn = Serial(port_usb,
                     '115200',
@@ -43,18 +43,17 @@ def _tx_thread():
     global quit
     send_addr = "ff02::1"
     send_port = 8850
+    secs = 2
     send_data = "sleep"
     command = ""
-
     count = 0
     while(not quit):
-        sleep(1);
+        sleep(0.5);
         count += 1
-        #set count to number of seconds 
         if(count == 10):
             command = "udp send " + send_addr + " " + str(send_port) + " " + send_data +"\n"
             write(conn, command)
-            print("Multicasting to nodes to sleep for 4 seconds")
+            print("Multicasted nodes to stop for " + str(2) + " seconds")
             count = 0
 
 def main():
@@ -81,8 +80,8 @@ def main():
         lock.acquire()
         line = conn.readline()
         lock.release()
-        if b'inet6 addr' in line:
-            hwaddr = str(line).split('addr: ')[1][:26]
+        if b'HWaddr' in line:
+            hwaddr = str(line).split('HWaddr: ')[1][:5]
             print("Hardware address is " + hwaddr)
             break
     
@@ -115,6 +114,7 @@ def main():
         while True:
             #lock.acquire()
             line = conn.readline()[:-1]
+            client1.loop(timeout=1.0, max_packets=1)
             #lock.release()
             # TDoA
             if b'SNIP  0' in line:
@@ -133,6 +133,7 @@ def main():
                 data_recieved = False
     except KeyboardInterrupt:
         print("Quitting program.. closing all threads")
+        client1.disconnect()
         quit = True
         mcast_thread.join()
         print("Everything successfully closed")
