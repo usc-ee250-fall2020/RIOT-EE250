@@ -12,7 +12,7 @@ quit = False
 lock = threading.Lock()
 
 # Default port that openmote connects to.
-port_usb = '/dev/ttyUSB2'
+port_usb = '/dev/ttyUSB1'
 try:
     conn = Serial(port_usb,
                     '115200',
@@ -50,7 +50,7 @@ def _tx_thread():
     while(not quit):
         sleep(0.5);
         count += 1
-        if(count == 10):
+        if(count == 20):
             command = "udp send " + send_addr + " " + str(send_port) + " " + send_data +"\n"
             write(conn, command)
             print("Multicasted nodes to stop for " + str(2) + " seconds")
