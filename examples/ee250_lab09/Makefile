@@ -1,4 +1,4 @@
-APPLICATION = timer_periodic_wakeup
+APPLICATION = ee250_lab09
 RIOTBASE ?= $(CURDIR)/../..
 BOARD ?= native
 USEMODULE += xtimer
