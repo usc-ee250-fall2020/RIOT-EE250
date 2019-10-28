@@ -211,7 +211,8 @@ int main(void)
 
         /* TODO: check if there are any events in the linked list and print the
         sequence strings comma-separated followed by the total number printed in 
-        one iteration of this loop on a new line. make sure to use a mutex! */
+        one iteration of this loop on a new line. make sure to use a mutex! Also 
+	do not forget to deallocate any allocated memory when you're done with it!*/
 
         /* Tips: 
             - you will need to use the poitner "event" above as a temp variable
