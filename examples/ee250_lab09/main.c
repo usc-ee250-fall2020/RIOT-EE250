@@ -32,8 +32,8 @@
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
-#define PRODUCER_INTERVAL   (50000)   /* 1 second */
-#define PRINT_INTERVAL      (2 * US_PER_SEC)  /* 10 seconds */
+#define PRODUCER_INTERVAL   (50000)   /* 50 ms */
+#define PRINT_INTERVAL      (2 * US_PER_SEC)  /* 2 seconds */
 
 #define PRNG_INITVAL            418 /* seed value for pseudorandom number generator */
 #define PROB_OF_1_IN_PERCENT    30 /* probability of generating a "1" */
@@ -215,7 +215,7 @@ int main(void)
 	do not forget to deallocate any allocated memory when you're done with it!*/
 
         /* Tips: 
-            - you will need to use the poitner "event" above as a temp variable
+            - you will need to use the pointer "event" above as a temp variable
             - use printf() instead of DEBUG() because this will be in the final
               printouts
          */
