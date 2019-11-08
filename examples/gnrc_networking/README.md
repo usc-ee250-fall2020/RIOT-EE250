@@ -1,8 +1,10 @@
-# gnrc_networking example
+# gnrc_networking example (Edited for EE 250L @ USC)
 
 This example shows you how to try out the code in two different ways: Either by communicating
 between the RIOT machine and its Linux host, or by communicating between two RIOT instances.
 Note that the former only works with native, i.e. if you run RIOT on your Linux machine.
+
+EE 250L: please go through this entire tutorial!
 
 ## Connecting RIOT native and the Linux host
 
@@ -24,8 +26,9 @@ First, create a tap interface:
     sudo ip link set tap0 up
 
 Now you can start the `gnrc_networking` example by invoking `make term`. This should
-automatically connect to the `tap0` interface. If this doesn't work for any reason,
-run make term with the tap0 interface as the PORT environment variable:
+compile this example for the `native` platform and automatically connect to the 
+`tap0` interface. If this doesn't work for any reason, run make term with the 
+tap0 interface as the PORT environment variable:
 
     PORT=tap0 make term
 
@@ -38,7 +41,8 @@ To verify that there is connectivity between RIOT and Linux, go to the RIOT cons
                inet6 addr: ff02::1:ffc5:f75a/128  scope: local [multicast]
 
 Copy the [link-local address](https://en.wikipedia.org/wiki/Link-local_address)
-of the RIOT node (prefixed with `fe80`) and try to ping it **from the Linux node**:
+of the RIOT node (prefixed with `fe80`) and try to ping it **from the Linux node** 
+(i.e., from another terminal in your VM):
 
     ping6 fe80::ccf5:e1ff:fec5:f75a%tap0
 
@@ -72,7 +76,8 @@ of the host (run on Linux):
             collisions:0 txqueuelen:0
             RX bytes:488 (488.0 B)  TX bytes:3517 (3.5 KB)
 
-Then open a UDP server on Linux (the `-l` option makes netcat listen for incoming connections):
+Then open a UDP server in a Linux terminal (the `-l` option makes netcat listen 
+for incoming connections):
 
     nc -6ul 8808
 
@@ -85,17 +90,29 @@ course write your own software, but you may have to bind the socket to a specifi
 interface (tap0 in this case). For an example that shows how to do so, see
 [here](https://gist.github.com/backenklee/dad5e80b764b3b3d0d3e).
 
+## Cleaning up the first example
+
+It is important that a developer clean up their workspace to prevent the 
+accumulation of artifacts throughout their system. To remove the tap0 interface
+in the first example:
+
+     sudo ip link delete tap0
+
 ## Connecting two RIOT instances
 
 When using native (i.e. when you're trying this on your Linux machine), you first
 need to set up two tap devices and a bridge that connects them. This constitutes a
-virtual network that the RIOT instances can use to communicate.
+virtual network that the RIOT instances can use to communicate. FYI: when you
+see relative paths in documentation, it assumes you are currently in the 
+directory of the README so you should be executing this while in the folder
+that holds this README.
 
     ./../../dist/tools/tapsetup/tapsetup --create 2
 
-Then, make sure you've compiled the application by calling `make` and start the
-first RIOT instance by invoking `make term`. In the RIOT shell, get to know the
-IP address of this node:
+This command will create three virtual interfaces: tap0, tap1, and tapbr0 (make 
+sure to clean this up if you need to rerun everything!). Then, make sure you've 
+compiled the application by calling `make` and start the first RIOT instance by 
+invoking `make term`. In the RIOT shell, get to know theIP address of this node:
 
     > ifconfig
     Iface  7   HWaddr: ce:f5:e1:c5:f7:5a
@@ -140,3 +157,8 @@ In your first terminal, you should now see output that looks like this.
     src_l2addr: a2:8a:84:68:54:4f
     dst_l2addr: 62:fc:3c:5e:40:df
     ~~ PKT    -  4 snips, total size:  79 byte
+
+## Moving onto Lab 10
+
+To test your implementation, you will use the workflow modeled above. Please
+reference this README when needed.
