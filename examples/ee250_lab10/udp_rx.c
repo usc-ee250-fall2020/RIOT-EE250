@@ -224,7 +224,7 @@ static void *_udp_rx(void *arg)
 
                 /* TODO: if this is a network packet, msg.content.ptr points to 
                    a node of type gnrc_pktstnip_t in a linked list. Each node
-                   on the linked list (i.e. "snip"  represents a different 
+                   on the linked list (i.e. "snip")  represents a different 
                    section of a network packet. More specifically, for a UDP 
                    packet, there will be a node for each of the following: MAC 
                    layer (802.15.4) header, ethernet header, ipv6 header, udp 
@@ -237,7 +237,7 @@ static void *_udp_rx(void *arg)
 
                    Once you find the payload, you will need to parse the payload
                    and either sleep, spam, or sample the ADC. When you're done
-                   with the packet, make sure to tell the network packet you're
+                   with the packet, make sure to tell the network stack you're
                    done with it so it can free up its resources! More hints can
                    be found in the documentaiton in net/gnrc.h.
                    */
@@ -254,7 +254,7 @@ static void *_udp_rx(void *arg)
                 break;
             case GNRC_NETAPI_MSG_TYPE_SET:
                 DEBUG("udp_rx_thr: set commands are not my job. ignoring w/ the \
-                    necessary reploy as per msg.h specifications.\n");
+                    necessary reply as per msg.h specifications.\n");
                 msg_reply(&msg, &reply);
                 break;
             default:
