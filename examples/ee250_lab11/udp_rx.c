@@ -26,12 +26,12 @@
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
-//TODO
-#define PRNG_INITVAL            0  //TODO: please use a unique int
+/* TODO */
+#define PRNG_INITVAL            0  /* please use a unique int */
 #define SLEEP_MSG_STR           ""
 #define SLEEP_MSG_LEN           0
-
 #define SLEEP_INTERVAL_SECS     (0)
+
 #define RAND_USLEEP_MIN         (0)
 #define RAND_USLEEP_MAX         (1000000)
 

@@ -123,7 +123,7 @@ int main(void)
 {
     int sample = 0;
 
-    msg_init_queue(main_msg_queue, sizeof(main_msg_queue));
+    msg_init_queue(main_msg_queue, MAIN_QUEUE_SIZE);
 
     puts("Welcome to Lab 11!");
 
@@ -152,12 +152,12 @@ int main(void)
     }
 
     // udp_rx_args_t udp_rx_args = //TODO
-    udp_rx_init((void *) &udp_rx_args); 
+    udp_rx_init(/*TODO*/); 
 
     /**
      * We can only initialize line 5 which corresponds to the Cortex M3's Port A
-     * Pin 7, or "PA7" on a schematic.  We found out this mapping by looking at
-     * the OpenMote-b's periph_conf.h file:
+     * Pin 7, or "PA7" labeled on the schematic/board.  We found out this 
+     * mapping by looking at the OpenMote-b's periph_conf.h file:
      *
      * RIOT-EE250/boards/openmote-b/include/periph_conf.h
      * 
@@ -165,9 +165,9 @@ int main(void)
      * understand the pins available on the OpenMote-b board, cross-reference 
      * the board with the schematic (look for EXT_CONN):
      *
-     * https://drive.google.com/file/d/1-nyGdwE2rrjEIpIzuDLM1fcsMmyz2K-K/view?usp=sharing
+     * https://drive.google.com/file/d/1fdpE-hnl0KNitM3-c0wZxHWbi3oVNMI7/view?usp=sharing
      */
-#ifdef MODULE_PERIPH_ADC    //native does not have an ADC
+#ifdef OPENMOTE_BUILD    //native does not have an ADC
     if (adc_init(ADC_LINE(ADC_LINE_SELECT)) < 0) {
         printf("Initialization of ADC_LINE(%u) failed\n", ADC_LINE_SELECT);
         return 1;

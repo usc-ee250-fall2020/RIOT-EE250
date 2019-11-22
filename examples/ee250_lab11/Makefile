@@ -13,6 +13,8 @@ RIOTBASE ?= $(CURDIR)/../..
 DEVELHELP ?= 1
 
 USEMODULE += xtimer
+FEATURES_REQUIRED = periph_gpio
+FEATURES_OPTIONAL = periph_gpio_irq
 
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
@@ -23,6 +25,13 @@ USEMODULE += gnrc_ipv6_router_default
 # Only require periph_adc if building for the OpenMote
 ifneq (,$(filter openmote-b,$(BOARD)))
   FEATURES_REQUIRED = periph_adc
+  CFLAGS += -DOPENMOTE_BUILD 
+endif
+
+# Only require periph_adc if building for the OpenMote
+ifneq (,$(filter openmote-cc2538,$(BOARD)))
+  FEATURES_REQUIRED = periph_adc
+  CFLAGS += -DOPENMOTE_BUILD 
 endif
 
 USEMODULE += gnrc_udp

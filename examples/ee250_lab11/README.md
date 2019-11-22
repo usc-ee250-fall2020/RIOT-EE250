@@ -2,7 +2,9 @@
 
 We have placed some preprocessor if-else statements and if statements in 
 the Makefile to help you to compile for either `openmote-b` or `native` with 
-little to no code changes. For `native` make sure to create a tap interface first:
+little to no code changes. For `native` make sure to create a tap interface 
+first. You do not need to use the `tapsetup` script because you only need to run
+one RIOT instance:
 
     sudo ip tuntap add tap0 mode tap user ${USER}
     sudo ip link set tap0 up
