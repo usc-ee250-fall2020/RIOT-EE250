@@ -151,7 +151,6 @@ int main(void)
         }
     }
 
-    // udp_rx_args_t udp_rx_args = //TODO
     udp_rx_init(/*TODO*/); 
 
     /**
@@ -180,7 +179,7 @@ int main(void)
     {
         //TODO: handle mutex, format payload, send udp pkt, set sample interval
 
-#ifdef MODULE_PERIPH_ADC
+#ifdef OPENMOTE_BUILD
         sample = adc_sample(ADC_LINE(ADC_LINE_SELECT), ADC_RES);
         if (sample < 0) {
             printf("ADC_LINE(%u): Error with line and resolution selection\n", ADC_LINE_SELECT);
