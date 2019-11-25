@@ -108,25 +108,27 @@ def main():
     slash_split_data=[]
     colon_split_data=[]
     data=""
-
+    
+    client1.loop_start()
     # Line processing.
     try:
         while True:
-            #lock.acquire()
+            lock.acquire()
             line = conn.readline()[:-1]
-            client1.loop(timeout=1.0, max_packets=1)
-            #lock.release()
+            #print(line)
+            #client1.loop(timeout=1.0, max_packets=1)
+            lock.release()
             # TDoA
             if b'SNIP  0' in line:
                 data_recieved = True
                 data = ""
             if data_recieved and not b'SNIP  1' in line:
-                print(line.decode('utf-8'))
+                #print(line.decode('utf-8'))
                 data += line.decode('utf-8')[74:].strip()
                 slash_split_data = data.split("/");
                 colon_split_data = data.split(":");
             if data_recieved and b'SNIP  1' in line:
-                print(line.decode('utf-8'))
+                #print(line.decode('utf-8'))
                 print("Data Recieved: " + data)
                 if(len(slash_split_data) == 2 and len(colon_split_data)==2):  #check if valid
                     ret= client1.publish(colon_split_data[0].strip(),colon_split_data[1])       #publish
