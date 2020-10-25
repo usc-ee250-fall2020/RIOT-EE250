@@ -1,4 +1,4 @@
-APPLICATION = ee250_lab09
+APPLICATION = ee250_threading
 RIOTBASE ?= $(CURDIR)/../..
 BOARD ?= native
 USEMODULE += xtimer
